@@ -45,4 +45,4 @@ COPY code code
 
 ## Default startup command
 
-CMD bash -c "python code/flask_server.py"
+CMD bash -c "python code/run_server.py"
