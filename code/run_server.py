@@ -1,4 +1,3 @@
-import os
 import argparse
 
 from flask import Flask
@@ -8,11 +7,6 @@ from endpoints.duration import duration_blueprint
 
 
 if __name__ == "__main__":
-
-    application = Flask(__name__)
-
-    application.register_blueprint(content_blueprint)
-    application.register_blueprint(duration_blueprint)
 
     # argument parser from command line
     parser = argparse.ArgumentParser(add_help=True)
@@ -29,6 +23,16 @@ if __name__ == "__main__":
 
     # parse arguments
     args = parser.parse_args()
+
+    # create Flask server
+    application = Flask(__name__)
+
+    # register endpoints in the flask 'blueprint' format
+    # which is a standalone building block
+    # read here in more details
+    # http: // flask.pocoo.org / docs / blueprints /
+    application.register_blueprint(content_blueprint)
+    application.register_blueprint(duration_blueprint)
 
     # launch flask server accessible from all hosts
     application.run(port=args.port, host="0.0.0.0", processes=args.processes)
