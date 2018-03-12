@@ -2,7 +2,9 @@
 
 This part of the ***Call Tracker*** project is responsible for audio files processing API. Processing here means extractions of various features and meta-information.
 
-# Launch API:
+Up-to-date list of the endpoints can be found [here](code/endpoints/README.md)
+
+# Fast API Launch
 
 The commands below fire up the Docker container with API server running
 
