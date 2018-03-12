@@ -8,7 +8,6 @@ RUN apt-get update --fix-missing && apt-get install -y \
     git \
     wget \
     bzip2 \
-    htop \
     vim \
     g++ \
     software-properties-common \
@@ -20,7 +19,7 @@ RUN wget https://repo.continuum.io/archive/Anaconda3-5.1.0-Linux-x86_64.sh -O /t
 
 RUN /bin/bash /tmp/anaconda.sh -b -p /opt/conda && \
     rm /tmp/anaconda.sh && \
-    echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh
+    echo "export PATH=/opt/conda/bin:$PATH" > /etc/profile.d/conda.sh
 
 ## Add anaconda on path
 
