@@ -2,7 +2,7 @@
 
 Below there is an up-to-date description of the currently available API endpoints.
 
-## /content
+# /content
 
 Endpoint `/content` is responsible for working with data at the server. Using this endopint one can upload or delete file.
 
@@ -32,7 +32,7 @@ Example of request:
 curl <address>/content/<content_id> -X DELETE
 ```
 
-## /duration
+# /duration
 
 This endpoint `/duration` computes the audio file duration.
 
