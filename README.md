@@ -23,6 +23,6 @@ docker run --rm -d -p 3000:3000 call-tracker-processing
 ```
 * Do a test post request:
 ```sh
-curl localhost:3000/duration -X POST -F audio=@./data/examples/speech.wav
+curl localhost:3000/duration -X POST -F audio=@data/examples/speech.wav
 ```
 * See a [full list](code/endpoints/README.md) of available functions
