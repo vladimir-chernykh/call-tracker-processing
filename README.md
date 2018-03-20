@@ -25,3 +25,4 @@ docker run --rm -d -p 3000:3000 call-tracker-processing
 ```sh
 curl localhost:3000/duration -X POST -F audio=@./data/examples/c-dur.mp3
 ```
+* See a [full list](code/endpoints/README.md) of available functions
