@@ -100,7 +100,7 @@ curl localhost:3000/duration -X POST -F audio=@data/examples/speech.wav
 ```
 * Use the 'content_id' which is returned by the `content` endpoint while uploading data to the server
 ```bash
-curl localhost:3000/content -X POST -F content_id=<content_id>
+curl localhost:3000/duration -X POST -F content_id=<content_id>
 ```
 
 Output:
@@ -110,6 +110,45 @@ Output:
   "msg": "Duration has been calculated", 
   "result": {
     "duration": 4.56
+  }, 
+  "status": "ok"
+}
+```
+
+# /stt
+
+This endpoint `/stt` transcribes the audio file into the text.
+
+<code class="prettyprint"><strong>POST</strong> \<address\>/stt</code>
+
+**Response description**
+
+JSON with 3 main fiedls:
+* `status` - whether the call was executed successfully or not ("ok" or "error")
+* `msg` - human-readable message about the status
+* `results` - dictionary with the results of the call; it will be empty if the error has occured
+  * `text` - recognized text
+
+**Request example**
+
+Input:
+
+* Upload directly using form field ot the request
+```bash
+curl localhost:3000/stt -X POST -F audio=@data/examples/speech.wav
+```
+* Use the 'content_id' which is returned by the `content` endpoint while uploading data to the server
+```bash
+curl localhost:3000/stt -X POST -F content_id=<content_id>
+```
+
+Output:
+
+```json
+{
+  "msg": "Transcription has successfully been done", 
+  "result": {
+    "text": "Пусть просто такую информацию легче записать голосом чем писать текстом"
   }, 
   "status": "ok"
 }
