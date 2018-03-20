@@ -78,7 +78,7 @@ Output:
 
 # /duration
 
-This endpoint `/duration` computes the audio file duration.
+This endpoint `/duration` computes the duration of audio file in seconds.
 
 <code class="prettyprint"><strong>POST</strong> \<address\>/duration</code>
 
