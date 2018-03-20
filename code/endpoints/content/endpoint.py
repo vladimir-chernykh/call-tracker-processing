@@ -34,7 +34,7 @@ class ContentEndpoint(MethodView):
 
         Using this method users sent files to the server. File should be attached in the form field. Example:
 
-        curl localhost:3000/content -X POST -F audio=@./data/examples/c-dur.mp3
+        curl localhost:3000/content -X POST -F audio=@data/examples/speech.wav
 
         The answer to this request contains the 'content_id' which is an uuid of the file at the server.
         One can address this file by given 'content_id' in all other endpoints.

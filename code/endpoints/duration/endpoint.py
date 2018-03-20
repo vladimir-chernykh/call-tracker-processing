@@ -38,7 +38,7 @@ class DurationEndpoint(MethodView):
         1) In the form field of the POST request. In this case the data are uploaded to the server and erased
         immediately after the calculation is done. Example:
 
-        curl localhost:3000/duration -X POST -F audio=@./data/examples/c-dur.mp3
+        curl localhost:3000/duration -X POST -F audio=@data/examples/speech.wav
 
         2) Provide 'content_id' of the file previously submitted to the 'content' endpoint.
         In this case there is no file transmission over the network. File is not deleted after the request. Example:
