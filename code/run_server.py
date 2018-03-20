@@ -2,6 +2,7 @@ import argparse
 
 from flask import Flask
 
+from endpoints.stt import stt_blueprint
 from endpoints.content import content_blueprint
 from endpoints.duration import duration_blueprint
 
@@ -32,9 +33,10 @@ if __name__ == "__main__":
     # register endpoints in the flask 'blueprint' format
     # which is a standalone building block
     # read here in more details
-    # http: // flask.pocoo.org / docs / blueprints /
+    # http://flask.pocoo.org/docs/blueprints/
     application.register_blueprint(content_blueprint)
     application.register_blueprint(duration_blueprint)
+    application.register_blueprint(stt_blueprint)
 
     # register custom error handlers
     application.register_error_handler(404, error_404)

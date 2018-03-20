@@ -16,6 +16,10 @@ def verify_config():
     # check if the upload folder exists and create if not
     os.makedirs(config["upload_folder"], exist_ok=True)
 
+    # -------------------- wit_api_key -------------------- #
+    # check if the API key is a string
+    assert (type(config["wit_api_key"]) == str), "WIT API key should be a string!"
+
 
 # do verification
 verify_config()

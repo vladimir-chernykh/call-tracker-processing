@@ -32,6 +32,7 @@ RUN conda update -n base conda
 ## Audio libs
 
 RUN conda install -c conda-forge librosa
+RUN pip install SpeechRecognition
 
 ## Mount point for processing folder
 
