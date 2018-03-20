@@ -25,7 +25,7 @@ JSON with 3 main fiedls:
 Input:
 
 ```bash
-curl localhost:3000/content -X POST -F audio=@data/examples/c-dur.mp3
+curl localhost:3000/content -X POST -F audio=@data/examples/speech.wav
 ```
 
 Output:
@@ -96,7 +96,7 @@ Input:
 
 * Upload directly using form field ot the request
 ```bash
-curl localhost:3000/duration -X POST -F audio=@data/examples/c-dur.mp3
+curl localhost:3000/duration -X POST -F audio=@data/examples/speech.wav
 ```
 * Use the 'content_id' which is returned by the `content` endpoint while uploading data to the server
 ```bash
