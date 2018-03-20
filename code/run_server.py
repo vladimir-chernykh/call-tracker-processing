@@ -5,6 +5,8 @@ from flask import Flask
 from endpoints.content import content_blueprint
 from endpoints.duration import duration_blueprint
 
+from error_handlers import error_404, error_500
+
 
 if __name__ == "__main__":
 
@@ -33,6 +35,10 @@ if __name__ == "__main__":
     # http: // flask.pocoo.org / docs / blueprints /
     application.register_blueprint(content_blueprint)
     application.register_blueprint(duration_blueprint)
+
+    # register custom error handlers
+    application.register_error_handler(404, error_404)
+    application.register_error_handler(500, error_500)
 
     # launch flask server accessible from all hosts
     application.run(port=args.port, host="0.0.0.0", processes=args.processes)

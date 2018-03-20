@@ -48,7 +48,7 @@ class DurationEndpoint(MethodView):
         The answer to this request contains either the duration of the requested file or the error message.
 
         Return:
-            _(flask.Response): web-response with json information about request wrapped inside
+            response(flask.Response): web-response with json information about request wrapped inside
         """
 
         # if file is requested through the 'content_id'
@@ -64,14 +64,18 @@ class DurationEndpoint(MethodView):
                 # calculate the duration
                 duration = librosa.get_duration(y=signal, sr=sampling_rate)
                 # send successful response with the result
-                return jsonify({"status": "ok",
-                                "msg": "Duration has been calculated",
-                                "result": {"duration": duration}})
+                response = jsonify({"status": "ok",
+                                    "msg": "Duration has been calculated",
+                                    "result": {"duration": duration}})
+                response.status_code = 200
+                return response
             else:
                 # send "file is not found" response
-                return jsonify({"status": "error",
-                                "msg": "No audio file with given 'content_id'",
-                                "result": {}})
+                response = jsonify({"status": "error",
+                                    "msg": "No audio file with given 'content_id'",
+                                    "result": {}})
+                response.status_code = 400
+                return response
 
         # if the file is sent via the form
         elif "audio" in request.files:
@@ -91,13 +95,17 @@ class DurationEndpoint(MethodView):
             # remove temp file
             os.remove(filepath)
             # send successful response with the result
-            return jsonify({"status": "ok",
-                            "msg": "Duration has been calculated",
-                            "result": {"duration": duration}})
+            response = jsonify({"status": "ok",
+                                "msg": "Duration has been calculated",
+                                "result": {"duration": duration}})
+            response.status_code = 200
+            return response
 
         # if file is not specified
         else:
             # send "no file" response
-            return jsonify({"status": "error",
-                            "msg": "No audio file was passed",
-                            "result": {}})
+            response = jsonify({"status": "error",
+                                "msg": "No audio file was passed",
+                                "result": {}})
+            response.status_code = 400
+            return response

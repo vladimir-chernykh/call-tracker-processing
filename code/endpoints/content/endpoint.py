@@ -40,7 +40,7 @@ class ContentEndpoint(MethodView):
         One can address this file by given 'content_id' in all other endpoints.
 
         Return:
-            _(flask.Response): web-response with json information about request wrapped inside
+            response(flask.Response): web-response with json information about request wrapped inside
         """
 
         # get file from the request
@@ -52,9 +52,11 @@ class ContentEndpoint(MethodView):
         # save file
         audio.save(filepath)
         # send successful response
-        return jsonify({"status": "ok",
-                        "msg": "The file has been added",
-                        "result": {"content_id": content_id}})
+        response = jsonify({"status": "ok",
+                            "msg": "The file has been added",
+                            "result": {"content_id": content_id}})
+        response.status_code = 200
+        return response
 
     def delete(self, content_id):
         """ Handler for the DELETE requests.
@@ -84,11 +86,15 @@ class ContentEndpoint(MethodView):
             # delete if exists
             os.remove(filepath)
             # send successful response
-            return jsonify({"status": "ok",
-                            "msg": "The file has been deleted",
-                            "result": {"content_id": content_id}})
+            response = jsonify({"status": "ok",
+                                "msg": "The file has been deleted",
+                                "result": {"content_id": content_id}})
+            response.status_code = 200
+            return response
         else:
             # send error otherwise
-            return jsonify({"status": "error",
-                            "msg": "No file with given 'content_id'",
-                            "result": {}})
+            response = jsonify({"status": "error",
+                                "msg": "No file with given 'content_id'",
+                                "result": {}})
+            response.status_code = 400
+            return response
