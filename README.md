@@ -2,7 +2,7 @@
 
 This part of the ***Call Tracker*** project is responsible for audio files processing API. Processing here means extractions of various features and meta-information.
 
-Up-to-date list of the endpoints can be found [here](code/endpoints/README.md)
+Up-to-date **list of the endpoints** can be found [here](code/endpoints/README.md)
 
 # Fast API Launch
 
