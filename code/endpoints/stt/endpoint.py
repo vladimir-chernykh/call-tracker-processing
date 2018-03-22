@@ -1,56 +1,45 @@
-import os
+import io
 
 import speech_recognition as sr
+from scipy.io.wavfile import write as write_wav
 
-from flask import jsonify
-from flask import request
-from flask.views import MethodView
-
-from werkzeug.utils import secure_filename
+from ..base.endpoint import BaseEndpoint
 
 
-class SpeechToTextEndpoint(MethodView):
-    """
-    This endpoint is responsible for transcribing the audio file into the text.
-
-    All the requests are handled via POST method.
-
-    The class inherits from MethodView
-    http://flask.pocoo.org/docs/views/
+class SpeechToTextEndpoint(BaseEndpoint):
+    """ This endpoint is responsible for transcribing the audio file into the text.
     """
 
-    def __init__(self, config):
-        """ Constructor
-
-        Args:
-            config(dict): dictionary with the common endpoints configurations
-        """
-
-        super(SpeechToTextEndpoint, self).__init__()
-        self.config = config
-
-    def _recognize(self, file):
+    def process(self, signal, framerate, request_params):
         """ Perform speech-to-text transcription from the audio sample.
         For now it uses https://wit.ai API. In future the transition to the custom recognizer will be done.
         Note that the output may contain <ERROR> parts if some chunks of the audio file were not recognized.
 
         Args:
-            file(str or file-like object): if file is a str, then it is interpreted as a path to an audio file.
-                                           Otherwise, file should be a file-like object such as io.BytesIO or similar.
+            signal(numpy.array): array with the raw audio waveform
+            framerate(int): sampling frequency of the recording
+            request_params(dict): additional parameters from the post request which
+                                  comes from the 'get_request_params' method
 
         Return:
-            text(str): recognized text
+            _(tuple): tuple which contains two elements:
+                result(dict): dictionary with the processing results
+                msg(str): human-readable message about the processing
         """
 
         # create recognizer instance
         r = sr.Recognizer()
-        # open file
-        with sr.AudioFile(file) as source:
-            # read the entire audio file
-            audio = r.record(source)
+        # create binary stream for writing raw waveform data
+        with io.BytesIO() as file:
+            # write raw waveform into the format of wav file
+            write_wav(file, framerate, signal)
+            # open wav file
+            with sr.AudioFile(file) as source:
+                # read the entire wav file into appropriate library format
+                audio = r.record(source)
 
         # calculate the duration
-        duration = len(audio.frame_data) / audio.sample_width / audio.sample_rate
+        duration = len(signal) / framerate
 
         # array to store chunk-by-chunk recognized text
         text = []
@@ -74,75 +63,7 @@ class SpeechToTextEndpoint(MethodView):
         # join texts of all chunks
         text = " ".join(text)
 
-        return text
-
-    def post(self):
-        """ Handler for the POST requests.
-
-        Using this method users are able to POST the file for the speech to text transcription.
-
-        Users have two options of sending the file to the system:
-
-        1) In the form field of the POST request. In this case the data are uploaded to the server and erased
-        immediately after the calculation is done. Example:
-
-        curl localhost:3000/duration -X POST -F audio=@data/examples/speech.wav
-
-        2) Provide 'content_id' of the file previously submitted to the 'content' endpoint.
-        In this case there is no file transmission over the network. File is not deleted after the request. Example:
-
-        curl localhost:3000/duration -X POST -F content_id=<content_id>
-
-        The answer to this request contains either the recognized text of the requested file or the error message.
-
-        Return:
-            response(flask.Response): web-response with json information about request wrapped inside
-        """
-
-        # if file is requested through the 'content_id'
-        if "content_id" in request.form:
-
-            # generate filepath to look up the file
-            filepath = os.path.join(self.config["upload_folder"],
-                                    secure_filename(request.form["content_id"]))
-
-            if os.path.exists(filepath):
-                # perform speech-to-text if file exists
-                text = self._recognize(filepath)
-                # send successful response
-                response = jsonify({"status": "ok",
-                                    "msg": "Transcription has successfully been done",
-                                    "result": {"text": text}})
-                response.status_code = 200
-                return response
-            else:
-                # send "file is not found" response
-                response = jsonify({"status": "error",
-                                    "msg": "No audio file with given 'content_id'",
-                                    "result": {}})
-                response.status_code = 400
-                return response
-
-        # if the file is sent via the form
-        elif "audio" in request.files:
-
-            # get file from the request
-            audio = request.files["audio"]
-
-            # perform speech-to-text
-            text = self._recognize(audio)
-            # send successful response
-            response = jsonify({"status": "ok",
-                                "msg": "Transcription has successfully been done",
-                                "result": {"text": text}})
-            response.status_code = 200
-            return response
-
-        # if file is not specified
-        else:
-            # send "no file" response
-            response = jsonify({"status": "error",
-                                "msg": "No audio file was passed",
-                                "result": {}})
-            response.status_code = 400
-            return response
+        # return results
+        result = {"text": text}
+        msg = "Transcription has successfully been done"
+        return result, msg

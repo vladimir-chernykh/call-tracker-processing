@@ -1,4 +1,5 @@
 {
   "upload_folder": "_cttemp",
-  "wit_api_key": "NMWDUU7AAURUOL65A3IFCLMWIIDIBSKJ"
+  "wit_api_key": "NMWDUU7AAURUOL65A3IFCLMWIIDIBSKJ",
+  "allowed_extensions": ["wav"]
 }
